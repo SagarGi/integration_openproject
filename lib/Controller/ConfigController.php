@@ -256,5 +256,4 @@ class ConfigController extends Controller {
 		$this->config->setAppValue(Application::APP_ID, 'nc_oauth_client_id', $clientInfo['id']);
 		return new DataResponse($clientInfo);
 	}
-
 }

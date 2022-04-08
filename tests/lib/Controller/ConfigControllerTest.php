@@ -2,6 +2,7 @@
 
 namespace OCA\OpenProject\Controller;
 
+use OCA\OpenProject\Service\OauthService;
 use OCA\OpenProject\Service\OpenProjectAPIService;
 use OCP\IConfig;
 use OCP\IL10N;
@@ -91,6 +92,7 @@ class ConfigControllerTest extends TestCase {
 			$this->l,
 			$apiServiceMock,
 			$this->createMock(LoggerInterface::class),
+			$this->createMock(OauthService::class),
 			'testUser'
 		);
 	}
@@ -150,6 +152,7 @@ class ConfigControllerTest extends TestCase {
 			$this->l,
 			$this->createMock(OpenProjectAPIService::class),
 			$loggerMock,
+			$this->createMock(OauthService::class),
 			'testUser'
 		);
 		$result = $configController->oauthRedirect('code', 'randomString');
@@ -205,6 +208,7 @@ class ConfigControllerTest extends TestCase {
 			$this->l,
 			$this->createMock(OpenProjectAPIService::class),
 			$loggerMock,
+			$this->createMock(OauthService::class),
 			'testUser'
 		);
 		$result = $configController->oauthRedirect('code', 'randomString');
@@ -281,6 +285,7 @@ class ConfigControllerTest extends TestCase {
 			$this->l,
 			$apiServiceMock,
 			$this->createMock(LoggerInterface::class),
+			$this->createMock(OauthService::class),
 			'testUser'
 		);
 		$result = $configController->oauthRedirect('code', 'randomString');
