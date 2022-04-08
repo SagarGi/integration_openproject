@@ -123,6 +123,11 @@ class ConfigController extends Controller {
 			$this->config->setAppValue(Application::APP_ID, $key, trim($value));
 		}
 		if (isset($values['oauth_instance_url'])) {
+			$oauthClientInternalId = $this->config->getAppValue(Application::APP_ID, 'nc-oauth-client-id', '');
+			if ($oauthClientInternalId !== '') {
+				$id = (int) $oauthClientInternalId;
+				$this->oauthService->deleteClient($id);
+			}
 			$this->config->deleteAppValue(Application::APP_ID, 'nc-oauth-client-id');
 		}
 		return new DataResponse(1);
