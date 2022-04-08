@@ -17,7 +17,7 @@
 				v-model="state.oauth_instance_url"
 				type="text"
 				:placeholder="t('integration_openproject', 'OpenProject address')"
-				@input="onInput">
+				@input="onInput(true)">
 			<label for="openproject-client-id">
 				<a class="icon icon-category-auth" />
 				{{ t('integration_openproject', 'Client ID') }}
@@ -40,6 +40,31 @@
 				:placeholder="t('integration_openproject', 'Client secret of the OAuth app in OpenProject')"
 				@focus="readonly = false"
 				@input="onInput">
+			<button v-if="state.nc_oauth_client === null"
+				@click="onNextcloudOauthCreateClick">
+				{{ t('integration_openproject', 'Create a Nextcloud OAuth client for OpenProject') }}
+			</button>
+			<span v-if="state.nc_oauth_client === null" />
+			<label v-if="state.nc_oauth_client !== null"
+				for="nextcloud-client-id">
+				<a class="icon icon-category-auth" />
+				{{ t('integration_openproject', 'Nextcloud client ID') }}
+			</label>
+			<input v-if="state.nc_oauth_client !== null"
+				id="openproject-client-id"
+				:value="state.nc_oauth_client.clientId"
+				type="text"
+				:readonly="true">
+			<label v-if="state.nc_oauth_client !== null"
+				for="nextcloud-client-secret">
+				<a class="icon icon-category-auth" />
+				{{ t('integration_openproject', 'Nextcloud client secret') }}
+			</label>
+			<input v-if="state.nc_oauth_client !== null"
+				id="openproject-client-secret"
+				:value="state.nc_oauth_client.clientSecret"
+				type="text"
+				:readonly="true">
 		</div>
 	</div>
 </template>
@@ -69,11 +94,14 @@ export default {
 		}
 	},
 	methods: {
-		onInput() {
+		onInput(resetNcOauthClient = false) {
 			const that = this
 			delay(() => {
 				that.saveOptions()
 			}, 2000)()
+			if (resetNcOauthClient) {
+				this.state.nc_oauth_client = null
+			}
 		},
 		saveOptions() {
 			const req = {
@@ -94,6 +122,17 @@ export default {
 						+ ': ' + error.response.request.responseText
 					)
 				})
+		},
+		onNextcloudOauthCreateClick() {
+			const url = generateUrl('/apps/integration_openproject/nc-oauth')
+			axios.post(url).then((response) => {
+				this.state.nc_oauth_client = response.data
+			}).catch((error) => {
+				showError(
+					t('integration_openproject', 'Failed to create Nextcloud OAuth client')
+					+ ': ' + error.response.request.responseText
+				)
+			})
 		},
 	},
 }
