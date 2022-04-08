@@ -52,8 +52,8 @@
 			</label>
 			<input v-if="state.nc_oauth_client !== null"
 				id="openproject-client-id"
-				:value="state.nc_oauth_client.clientId"
 				type="text"
+				:value="ncClientId"
 				:readonly="true">
 			<label v-if="state.nc_oauth_client !== null"
 				for="nextcloud-client-secret">
@@ -62,8 +62,8 @@
 			</label>
 			<input v-if="state.nc_oauth_client !== null"
 				id="openproject-client-secret"
-				:value="state.nc_oauth_client.clientSecret"
 				type="text"
+				:value="ncClientSecret"
 				:readonly="true">
 		</div>
 	</div>
@@ -92,6 +92,14 @@ export default {
 			readonly: true,
 			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_openproject/oauth-redirect'),
 		}
+	},
+	computed: {
+		ncClientId() {
+			return this.state.nc_oauth_client?.clientId
+		},
+		ncClientSecret() {
+			return this.state.nc_oauth_client?.clientSecret
+		},
 	},
 	methods: {
 		onInput(resetNcOauthClient = false) {
